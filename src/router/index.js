@@ -6,6 +6,8 @@ import {
   createWebHashHistory,
 } from 'vue-router'
 import routes from './routes'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { firebaseApp } from 'boot/auth'
 
 /*
  * If not building with SSR mode, you can
@@ -32,6 +34,24 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
   })
+
+  // Guardia global para rutas protegidas
+  Router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      const auth = getAuth(firebaseApp)
+      // Esperar a que Firebase determine el estado de autenticación
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        unsubscribe(); // Detener el listener inmediatamente
+        if (user) {
+          next();
+        } else {
+          next('/login');
+        }
+      });
+    } else {
+      next();
+    }
+  });
 
   return Router
 })
