@@ -13,7 +13,7 @@ export const useProductsStore = defineStore("products", {
             try {
                 const response = await api({
                     method: 'get',
-                    url: 'http://localhost:3000/api/v1/products/allProducts',
+                    url: 'https://api-pxhu.onrender.com/api/v1/products/allProducts',
                 });
                 return response
             } catch (error) {
@@ -33,7 +33,7 @@ export const useProductsStore = defineStore("products", {
             try {
                 const response = await api({
                     method: 'post',
-                    url: 'http://localhost:3000/api/v1/products/addProduct',
+                    url: 'https://api-pxhu.onrender.com/api/v1/products/addProduct',
                     data: payload
                 });
                 return response
