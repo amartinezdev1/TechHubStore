@@ -4,7 +4,7 @@
             <div class="col-12 col-md-6 col-lg-3">
                 <section class="footer-logo row items-center">
                     <q-avatar size="50px" class="cursor-pointer" @click="goToHome">
-                        <img src="/src/assets/logo-icon.svg" />
+                        <img src="/logo-icon.svg" />
                     </q-avatar>
                     <q-toolbar-title
                         class="text-h6 text-weight-bold cursor-pointer"
