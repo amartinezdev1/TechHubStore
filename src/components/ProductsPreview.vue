@@ -6,7 +6,7 @@
         <span
             class="text-body1 text-weight-bold text-primary"
             style="cursor: pointer"
-            @click="goToProduct"
+            @click="goToProduct(props.product)"
             >Ver producto</span
         >
     </q-card>
@@ -27,9 +27,9 @@ const props = defineProps({
 const router = useRouter()
 const productsStore = useProductsStore()
 
-const goToProduct = () => {
-    productsStore.setProduct(props.product)
-    const slug = slugify(props.product.name || '')
+const goToProduct = (product) => {
+    productsStore.setProduct(product)
+    const slug = slugify(product.name || '')
     router.push({ name: 'product-detail', params: { slug } })
 }
 </script>

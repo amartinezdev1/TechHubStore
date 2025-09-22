@@ -23,6 +23,8 @@
                             :key="product.id"
                             :product="product"
                             style="background-color: #f5f5f5; min-width: 200px"
+                            @click="goToProduct(product)"
+                            class="product-item"
                         />
                     </div>
                 </q-carousel-slide>
@@ -33,12 +35,21 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { slugify } from 'src/helpers/slugify'
 import { useProductsStore } from 'src/stores/products'
 import ProductsPreview from './ProductsPreview.vue'
 
+const router = useRouter()
 const slide = ref(1)
 const productsStore = useProductsStore()
 const allProducts = ref([])
+
+function goToProduct(product) {
+    productsStore.setProduct(product)
+    const slug = slugify(product.name || '')
+    router.push({ name: 'product-detail', params: { slug } })
+}
 
 onMounted(() => {
     allProducts.value = productsStore.allProducts || []

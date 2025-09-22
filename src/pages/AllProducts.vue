@@ -1,7 +1,7 @@
 <template>
     <main class="all-products" :class="wrapperClass">
         <div class="product-header q-mb-lg">
-            <div class="text-h3 text-weight-bold col-8">Productos similares</div>
+            <div class="text-h3 text-weight-bold col-8">Todos los productos</div>
             <q-btn
                 no-caps
                 label="Agregar producto"
@@ -21,18 +21,16 @@
                                 size="32px"
                                 name="delete"
                                 color="white"
-                                style="top: 8px; right: 8px"
+                                style="top: 8px; right: 8px; cursor: pointer"
                             >
-                                <q-tooltip> Tooltip </q-tooltip>
                             </q-icon>
                             <q-icon
                                 class="absolute all-pointer-events"
                                 size="32px"
                                 name="edit"
                                 color="white"
-                                style="top: 8px; right: 42px"
+                                style="top: 8px; right: 42px; cursor: pointer"
                             >
-                                <q-tooltip> Tooltip </q-tooltip>
                             </q-icon>
                         </q-img>
                         <span class="text-body1">{{ product.name }}</span>
