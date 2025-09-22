@@ -7,6 +7,7 @@
                 no-caps
                 icon-right="arrow_forward"
                 label="Ver todo"
+                @click="$router.push('/all-products')"
                 class="text-body1 text-primary text-weight-bold"
             />
         </section>

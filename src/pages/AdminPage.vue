@@ -63,7 +63,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProductsStore } from 'src/stores/products'
 import { notifyWarn } from 'src/helpers/NotifyHelpers'
@@ -86,19 +86,17 @@ async function addNewProduct() {
         category: [category.value],
         image: urlImage.value,
     })
-
+    console.log('result', result)
     if (result.data?.success) {
-        productsStore.setProduct(result.data?.data)
-        const slug = slugify(result.data?.data?.name || '')
+        const newProduct = result.data?.data
+        productsStore.setProduct(newProduct)
+        productsStore.allProducts.push(newProduct)
+        const slug = slugify(newProduct.name || '')
         router.push({ name: 'product-detail', params: { slug } })
     } else {
         notifyWarn('Error al agregar el producto. Inténtalo de nuevo.')
     }
 }
-
-onMounted(() => {
-    productsStore.clearProduct
-})
 </script>
 
 <style lang="scss" scoped>

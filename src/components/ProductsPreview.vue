@@ -28,7 +28,6 @@ const router = useRouter()
 const productsStore = useProductsStore()
 
 const goToProduct = () => {
-    // Guardamos el producto actual en el store (fallback si se recarga desde esta sesión)
     productsStore.setProduct(props.product)
     const slug = slugify(props.product.name || '')
     router.push({ name: 'product-detail', params: { slug } })

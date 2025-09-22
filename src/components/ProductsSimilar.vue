@@ -4,14 +4,29 @@
             <div class="text-h3">Productos similares</div>
         </div>
         <div>
-            <div class="row products-lists q-gutter-md justify-between">
-                <ProductsPreview
-                    v-for="product in allProducts.slice(0, 6)"
-                    :key="product.id"
-                    :product="product"
-                    style="background-color: #f5f5f5"
-                />
-            </div>
+            <q-carousel
+                v-model="slide"
+                transition-prev="slide-right"
+                transition-next="slide-left"
+                swipeable
+                animated
+                arrows
+                height="350px"
+                style="background-color: #f5f5f5"
+            >
+                <q-carousel-slide :name="1" class="column">
+                    <div
+                        class="row fit justify-start items-center q-gutter-lg q-col-gutter no-wrap"
+                    >
+                        <ProductsPreview
+                            v-for="product in allProducts"
+                            :key="product.id"
+                            :product="product"
+                            style="background-color: #f5f5f5; min-width: 200px"
+                        />
+                    </div>
+                </q-carousel-slide>
+            </q-carousel>
         </div>
     </section>
 </template>
@@ -21,6 +36,7 @@ import { ref, onMounted } from 'vue'
 import { useProductsStore } from 'src/stores/products'
 import ProductsPreview from './ProductsPreview.vue'
 
+const slide = ref(1)
 const productsStore = useProductsStore()
 const allProducts = ref([])
 

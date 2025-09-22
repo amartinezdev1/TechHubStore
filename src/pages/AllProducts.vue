@@ -15,12 +15,32 @@
             <div class="product-list justify-between">
                 <div class="col-2 q-mb-lg" v-for="product in allProducts" :key="product.id">
                     <q-card class="my-card column" flat>
-                        <img :src="product.image" class="product-image" />
+                        <q-img :src="product.image" no-native-menu class="product-image">
+                            <q-icon
+                                class="absolute all-pointer-events"
+                                size="32px"
+                                name="delete"
+                                color="white"
+                                style="top: 8px; right: 8px"
+                            >
+                                <q-tooltip> Tooltip </q-tooltip>
+                            </q-icon>
+                            <q-icon
+                                class="absolute all-pointer-events"
+                                size="32px"
+                                name="edit"
+                                color="white"
+                                style="top: 8px; right: 42px"
+                            >
+                                <q-tooltip> Tooltip </q-tooltip>
+                            </q-icon>
+                        </q-img>
                         <span class="text-body1">{{ product.name }}</span>
-                        <span class="text-body1 text-weight-bold">{{ product.precio }}</span>
+                        <span class="text-body1 text-weight-bold">{{ product.price }}</span>
                         <span
                             class="text-body1 text-weight-bold text-primary"
                             style="cursor: pointer"
+                            @click="goToProduct(product)"
                             >Ver producto</span
                         >
                     </q-card>
@@ -35,6 +55,7 @@ import { useProductsStore } from 'src/stores/products'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
+import { slugify } from 'src/helpers/slugify'
 
 const $q = useQuasar()
 const router = useRouter()
@@ -53,6 +74,12 @@ const allProducts = productsStore.allProducts || []
 
 const goToAddProduct = () => {
     router.push('/new-product')
+}
+
+const goToProduct = (product) => {
+    productsStore.setProduct(product)
+    const slug = slugify(product.name || '')
+    router.push({ name: 'product-detail', params: { slug } })
 }
 </script>
 
