@@ -5,6 +5,7 @@ import { api } from "boot/axios";
 export const useProductsStore = defineStore("products", {
     state: () => ({
         product: null,
+        allProducts: [],
     }),
     getters: {},
     actions: {
@@ -62,12 +63,21 @@ export const useProductsStore = defineStore("products", {
             } else return { success: false, message: response.data, handled: false}
         },
 
+        setAllProducts(products){
+            this.allProducts = products;
+        },
+
         setProduct(product) {
             this.product = product;
+        },
+
+        clearAllProducts() {
+            this.allProducts = [];
         },
 
         clearProduct() {
             this.product = null;
         }
     },
+    persist: true
 });

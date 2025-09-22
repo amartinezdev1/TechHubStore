@@ -68,7 +68,7 @@ const googleProvider = new GoogleAuthProvider()
 const authUserWithGoogle = () => {
     signInWithPopup(auth, googleProvider)
         .then(() => {
-            router.push('/new-product')
+            router.push('/all-products')
         })
         .catch((error) => {
             notifyWarn('Error al iniciar sesión con Google: ' + error.message)
@@ -78,7 +78,7 @@ const authUserWithGoogle = () => {
 const authUser = () => {
     signInWithEmailAndPassword(auth, email.value, password.value)
         .then(() => {
-            router.push('/new-product')
+            router.push('/all-products')
         })
         .catch((error) => {
             notifyWarn('Error al iniciar sesión: ' + error.message)

@@ -27,15 +27,55 @@
         </section>
         <section class="header-actions row items-center q-gutter-sm">
             <q-btn flat round icon="search" class="lt-md" color="primary" />
-            <q-btn flat no-caps label="Login" class="login-button gt-xs" @click="goToLogin" />
-            <q-btn flat round icon="person" class="lt-sm" color="primary" @click="goToLogin" />
+            <q-btn
+                v-if="!userStore.user"
+                flat
+                no-caps
+                label="Login"
+                class="login-button gt-xs"
+                @click="goToLogin"
+            />
+            <q-btn
+                v-if="!userStore.user"
+                flat
+                round
+                icon="person"
+                class="lt-sm"
+                color="primary"
+                @click="goToLogin"
+            />
+            <q-btn
+                v-if="userStore.user"
+                flat
+                no-caps
+                label="Logout"
+                class="logout-button gt-xs"
+                color="negative"
+                @click="logout"
+            />
+            <q-btn
+                v-if="userStore.user"
+                flat
+                round
+                icon="logout"
+                class="lt-sm"
+                color="negative"
+                @click="logout"
+            />
         </section>
     </header>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
+import { useUserStore } from 'src/stores/user'
+import { getAuth, signOut } from 'firebase/auth'
 const router = useRouter()
+const userStore = useUserStore()
+onMounted(() => {
+    userStore.initAuthListener()
+})
 
 function goToLogin() {
     router.push('/login')
@@ -43,6 +83,13 @@ function goToLogin() {
 
 function goToHome() {
     router.push('/')
+}
+
+function logout() {
+    const auth = getAuth()
+    signOut(auth).then(() => {
+        router.push('/')
+    })
 }
 </script>
 
@@ -79,6 +126,21 @@ function goToHome() {
     &:hover {
         background-color: $primary;
         color: white;
+    }
+}
+
+.logout-button {
+    padding: 0.5rem 2rem;
+    color: $primary;
+    border: 1px solid $negative;
+
+    @media (min-width: 768px) {
+        padding: 0.5rem 3rem;
+    }
+
+    &:hover {
+        color: white !important;
+        background-color: $negative !important;
     }
 }
 

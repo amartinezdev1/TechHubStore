@@ -25,6 +25,7 @@ onMounted(async () => {
     const result = await productsStore.fetchAllProducts()
     if (result.data?.success) {
         const allProducts = result.data?.data
+        productsStore.setAllProducts(allProducts)
         consolas.value = allProducts.filter((product) => product.category.includes('console'))
         starWars.value = allProducts.filter((product) => product.category.includes('starwars'))
         diversos.value = allProducts.filter((product) => product.category.includes('other'))

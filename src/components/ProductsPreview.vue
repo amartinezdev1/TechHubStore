@@ -6,7 +6,7 @@
         <span
             class="text-body1 text-weight-bold text-primary"
             style="cursor: pointer"
-            @click="goToProduct()"
+            @click="goToProduct"
             >Ver producto</span
         >
     </q-card>
@@ -15,7 +15,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useProductsStore } from 'src/stores/products'
-import { onMounted } from 'vue'
+import { slugify } from 'src/helpers/slugify'
 
 const props = defineProps({
     product: {
@@ -26,14 +26,13 @@ const props = defineProps({
 
 const router = useRouter()
 const productsStore = useProductsStore()
-function goToProduct() {
-    productsStore.setProduct(props.product)
-    router.push('/product-details')
-}
 
-onMounted(() => {
-    productsStore.clearProduct()
-})
+const goToProduct = () => {
+    // Guardamos el producto actual en el store (fallback si se recarga desde esta sesión)
+    productsStore.setProduct(props.product)
+    const slug = slugify(props.product.name || '')
+    router.push({ name: 'product-detail', params: { slug } })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -42,6 +41,6 @@ onMounted(() => {
     height: 200px;
     object-fit: cover;
     display: block;
-    margin: 0 auto;
+    margin: 1rem auto;
 }
 </style>

@@ -67,6 +67,7 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProductsStore } from 'src/stores/products'
 import { notifyWarn } from 'src/helpers/NotifyHelpers'
+import { slugify } from 'src/helpers/slugify'
 
 const router = useRouter()
 const productsStore = useProductsStore()
@@ -85,10 +86,11 @@ async function addNewProduct() {
         category: [category.value],
         image: urlImage.value,
     })
-    console.log(result.data)
+
     if (result.data?.success) {
         productsStore.setProduct(result.data?.data)
-        router.push('/product-details')
+        const slug = slugify(result.data?.data?.name || '')
+        router.push({ name: 'product-detail', params: { slug } })
     } else {
         notifyWarn('Error al agregar el producto. Inténtalo de nuevo.')
     }
