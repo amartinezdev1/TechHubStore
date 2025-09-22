@@ -41,7 +41,6 @@ const router = useRouter()
 const isMobile = computed(() => $q.screen.width < 768)
 const isTablet = computed(() => $q.screen.width >= 768 && $q.screen.width < 1024)
 const isDesktop = computed(() => $q.screen.width >= 1024)
-console.log(isMobile, isTablet, isDesktop)
 
 const wrapperClass = computed(() => ({
     mobile: isMobile.value,
