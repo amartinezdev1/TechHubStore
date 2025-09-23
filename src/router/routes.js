@@ -32,6 +32,12 @@ const routes = [
                 component: () => import('../components/ProductDetails.vue'),
             },
             {
+                name: 'update-product',
+                path: 'update-product/:slug',
+                meta: { requiresAuth: true },
+                component: () => import('pages/UpdateProduct.vue'),
+            },
+            {
                 path: 'all-products',
                 meta: { requiresAuth: true },
                 component: () => import('pages/AllProducts.vue'),

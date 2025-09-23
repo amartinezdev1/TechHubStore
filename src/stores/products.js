@@ -29,6 +29,26 @@ export const useProductsStore = defineStore("products", {
             }
         },
 
+        async fetchProductById(payload) {
+            Loading.show();
+            try {
+                const response = await api({
+                    method: 'get',
+                    url: `https://api-pxhu.onrender.com/api/v1/products/getProduct/${payload.id}`
+                })
+                return response
+            } catch (error) {
+                const response = { success: false, message: "", handled: false };
+                if (error._handled) {
+                    response.handled = true;
+                }
+                response.message = 'ERROR - ' + error;
+                return response;
+            } finally {
+                Loading.hide();
+            }
+        },
+
         async addNewProduct(payload) {
             Loading.show();
             try {
@@ -37,6 +57,47 @@ export const useProductsStore = defineStore("products", {
                     url: 'https://api-pxhu.onrender.com/api/v1/products/addProduct',
                     data: payload
                 });
+                return response
+            } catch (error) {
+                const response = { success: false, message: "", handled: false };
+                if (error._handled) {
+                    response.handled = true;
+                }
+                response.message = 'ERROR - ' + error;
+                return response;
+            } finally {
+                Loading.hide();
+            }
+        },
+
+        async updateProduct(payload) {
+            Loading.show();
+            try {
+                const response = await api({
+                    method: 'put',
+                    url: `https://api-pxhu.onrender.com/api/v1/products/updateProduct/${payload.id}`,
+                    data: payload
+                })
+                return response
+            } catch (error) {
+                const response = { success: false, message: "", handled: false };
+                if (error._handled) {
+                    response.handled = true;
+                }
+                response.message = 'ERROR - ' + error;
+                return response;
+            } finally {
+                Loading.hide()
+            }
+        },
+
+        async deleteProduct(payload) {
+            Loading.show();
+            try {
+                const response = await api({
+                    method: 'delete',
+                    url: `https://api-pxhu.onrender.com/api/v1/products/deleteProduct/${payload.id}`
+                })
                 return response
             } catch (error) {
                 const response = { success: false, message: "", handled: false };

@@ -22,6 +22,7 @@
                                 name="delete"
                                 color="white"
                                 style="top: 8px; right: 8px; cursor: pointer"
+                                @click="openDeleteDialog(product)"
                             >
                             </q-icon>
                             <q-icon
@@ -30,6 +31,7 @@
                                 name="edit"
                                 color="white"
                                 style="top: 8px; right: 42px; cursor: pointer"
+                                @click="updateProduct(product)"
                             >
                             </q-icon>
                         </q-img>
@@ -46,17 +48,37 @@
             </div>
         </div>
     </main>
+    <ConfirmDialog v-model="showDeleteDialog" @confirm="confirmDelete" />
 </template>
 
 <script setup>
 import { useProductsStore } from 'src/stores/products'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { slugify } from 'src/helpers/slugify'
+import { notifyWarn } from 'src/helpers/NotifyHelpers'
+import ConfirmDialog from 'src/components/ConfirmDialog.vue'
+
+const showDeleteDialog = ref(false)
+const productToDelete = ref(null)
+
+function openDeleteDialog(product) {
+    productToDelete.value = product
+    showDeleteDialog.value = true
+}
+
+function confirmDelete() {
+    if (productToDelete.value) {
+        deleteProduct(productToDelete.value)
+        productToDelete.value = null
+    }
+    showDeleteDialog.value = false
+}
 
 const $q = useQuasar()
 const router = useRouter()
+const productsStore = useProductsStore()
 const isMobile = computed(() => $q.screen.width < 768)
 const isTablet = computed(() => $q.screen.width >= 768 && $q.screen.width < 1024)
 const isDesktop = computed(() => $q.screen.width >= 1024)
@@ -67,9 +89,6 @@ const wrapperClass = computed(() => ({
     desktop: isDesktop.value,
 }))
 
-const productsStore = useProductsStore()
-const allProducts = productsStore.allProducts || []
-
 const goToAddProduct = () => {
     router.push('/new-product')
 }
@@ -79,6 +98,32 @@ const goToProduct = (product) => {
     const slug = slugify(product.name || '')
     router.push({ name: 'product-detail', params: { slug } })
 }
+
+const updateProduct = (product) => {
+    productsStore.setProduct(product)
+    const slug = slugify(product.name || '')
+    router.push({ name: 'update-product', params: { slug } })
+}
+
+const deleteProduct = async (product) => {
+    const result = await productsStore.deleteProduct(product)
+    console.log(result)
+    if (result.data?.success) {
+        productsStore.allProducts = productsStore.allProducts.filter((p) => p.id !== product.id)
+        allProducts.value = allProducts.value.filter((p) => p.id !== product.id)
+    } else {
+        notifyWarn('No se pudo eliminar el producto')
+    }
+}
+
+const allProducts = ref([])
+onMounted(async () => {
+    const result = await productsStore.fetchAllProducts()
+    if (result.data?.success) {
+        allProducts.value = result.data?.data
+        productsStore.setAllProducts(allProducts.value)
+    }
+})
 </script>
 
 <style lang="scss" scoped>
